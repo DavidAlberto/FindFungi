@@ -60,8 +60,20 @@ Malassezia restricta,76775,378,0,0.496034792692,100.0
 Candida tropicalis MYA-3404,294747,265,0,-0.265788716977,100.0
 ~~~
 
+## Descargar e instalar NCBI SRA Toolkit
+A través de herramientas en línea de comando se pueden obtener los datos necesarios para continuar con este pipeline.
+~~~
+# Descargar programa
+ wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
+# Instalar
+tar -vxzf sratoolkit.tar.gz
+export PATH=$PATH:/media/strain/datos/sratoolkit.3.0.0-ubuntu64/bin
+which fastq-dump
+vdb-config --interactive
+~~~
+
 ## Datos obtenidos de NCBI SRA
-Para obtener los archivos `fastq` a partir del [NCBI-SRA](https://www-ncbi-nlm-nih-gov.ezproxy.u-pec.fr/Traces/study/) usando el ID BioProject. Descarga SRR_Acc_List.txt de la sección "Accession List" de todos los archivos seleccionados. Con esté archivo y con la herramienta `SRA toolkit`.
+Para obtener los archivos `fastq` a partir del [NCBI-SRA](https://www-ncbi-nlm-nih-gov.ezproxy.u-pec.fr/Traces/study/) usando el ID BioProject. Descarga SRR_Acc_List.txt de la sección "Accession List" de todos los archivos seleccionados. Con este archivo y con la herramienta `SRA toolkit`.
 El formato SRR_Acc_List.txt es como sigue:
 ~~~
 SRR11192680
@@ -81,14 +93,26 @@ do
 fasterq-dump --split-files $name/$name.sra
 done
 ~~~
+Antes de instalar kraken 2, necesitarás actualizar la versión de sudo con:
+```
+$ sudo apt-get update
+```
+Entonces puedes instalar el paquete
+```
+$ sudo apt-get install kraken2
+```
+El siguiente paso en la instalación podría tratar de instalar la paquetería manualmente por descargar con anaconda (el cual deberás tener previamente instalado https://docs.anaconda.com/anaconda/install/):
+```
+$ conda install -c bioconda kraken2
+```
+Una vez que hayas descargado los datos, necesitarás correr el script de bash:
+```
+$ bash Anaconda3.....2022.sh
+```
+Para seguir con el código anterior, presiona enter para continuar y acepta los términos de instalación. Para finalizar el proceso, necesitan configurar el PATH donde quieras ubicarlo, de lo contrario, deja las condiciones en default.
 
-## Descargar e instalar NCBI SRA Toolkit
-~~~
-# Descargar programa
- wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
-# Instalar
-tar -vxzf sratoolkit.tar.gz
-export PATH=$PATH:/media/strain/datos/sratoolkit.3.0.0-ubuntu64/bin
-which fastq-dump
-vdb-config --interactive
-~~~
+
+
+
+
+
