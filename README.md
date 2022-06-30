@@ -93,6 +93,7 @@ do
 fasterq-dump --split-files $name/$name.sra
 done
 ~~~
+## Instalación de Kraken2
 Antes de instalar kraken 2, necesitarás actualizar la versión de sudo con:
 ```
 $ sudo apt-get update
