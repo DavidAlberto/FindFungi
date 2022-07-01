@@ -10,7 +10,49 @@ El siguiente pipeline es una modificación del desarrollado por [Donovan y col.,
 - ncbi blast 2.2.30
 - Rscript 3.3.3 (packages: wordcloud)
 - graphviz 2.40.1
-- python 2.7.13 (modules: sys, os, ete3, Bio, math, argparse, itertools, collections & re)
+- python 2.7.13 (modules: sys, os, ete3, Bio, math, argparse, itertools, collections & re)   
+
+## Instalación prerrequisitos: kraken 0.10.5-beta
+
+Kraken es uno de los requerimientos para continuar con el pipeline de FindFungi. Por ello buscamos la versión de interés, en este caso en [Anaconda](https://anaconda.org/bioconda/kraken/files) encontramos la versión deseada. Instalamos la paquetería
+
+~~~
+conda install kraken=0.10.5-beta
+~~~
+    
+## Obtención de datos con NCBI SRA Toolkit
+A través de herramientas en línea de comando se pueden obtener los datos necesarios para continuar con este pipeline.
+~~~
+# Descargar programa
+ wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
+# Instalar
+tar -vxzf sratoolkit.tar.gz
+export PATH=$PATH:/media/strain/datos/sratoolkit.3.0.0-ubuntu64/bin
+which fastq-dump
+vdb-config --interactive
+~~~
+
+## Descarga de datos con NCBI SRA
+Para obtener los archivos `fastq` a partir del [NCBI-SRA](https://www-ncbi-nlm-nih-gov.ezproxy.u-pec.fr/Traces/study/) usando el ID BioProject. Descarga SRR_Acc_List.txt de la sección "Accession List" de todos los archivos seleccionados. Con este archivo y con la herramienta `SRA toolkit`.
+El formato SRR_Acc_List.txt es como sigue:
+~~~
+SRR11192680
+SRR11192681
+SRR11192682
+SRR11192683
+SRR11192684
+~~~
+Descargar archivos SRA
+~~~
+prefetch --option-file SRR_Acc_List.txt
+~~~
+Convertir SRA a fastq
+~~~
+for name in DIRECTORY
+do
+fasterq-dump --split-files $name/$name.sra
+done
+~~~    
     
 ## Instalación
 - Descarga todos los scripts de GitHub/GiantSpaceRobot y guardalos en una carpeta de Scripts. Necesitas darles el permiso (chmod 755 * ).
@@ -36,7 +78,7 @@ tar -xvzf $line
 done
 ~~~
 
-## Datos de prueba
+## Corriendo datos de prueba
 Descarga el conjuntos de datos ERR675624 de la European Nucleotide Archive. Este conjunto contiene lecturas de hongos.
 ~~~
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR675/ERR675624/ERR675624_1.fastq.gz
@@ -46,7 +88,8 @@ Descomprime los archivos y concatenalos
 ~~~
 gunzip ERR675624_*.fastq.gz
 cat ERR675624_*.fastq > ERR675624_both-pairs.fastq
-~~~
+~~~    
+    
 
 ## Ejecuta el pipeline
 ~~~
@@ -60,41 +103,18 @@ Malassezia restricta,76775,378,0,0.496034792692,100.0
 Candida tropicalis MYA-3404,294747,265,0,-0.265788716977,100.0
 ~~~
 
-## Descargar e instalar NCBI SRA Toolkit
-A través de herramientas en línea de comando se pueden obtener los datos necesarios para continuar con este pipeline.
+
+# Prueba con Kraken2 
+
+## Instalación de Kraken2
+
+Este paquete se instaló en un ambiente de conda. Para ello, antes de instalar Kraken 2
+
 ~~~
-# Descargar programa
- wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/3.0.0/sratoolkit.3.0.0-ubuntu64.tar.gz
-# Instalar
-tar -vxzf sratoolkit.tar.gz
-export PATH=$PATH:/media/strain/datos/sratoolkit.3.0.0-ubuntu64/bin
-which fastq-dump
-vdb-config --interactive
+conda env create -n kraken2
 ~~~
 
-## Datos obtenidos de NCBI SRA
-Para obtener los archivos `fastq` a partir del [NCBI-SRA](https://www-ncbi-nlm-nih-gov.ezproxy.u-pec.fr/Traces/study/) usando el ID BioProject. Descarga SRR_Acc_List.txt de la sección "Accession List" de todos los archivos seleccionados. Con este archivo y con la herramienta `SRA toolkit`.
-El formato SRR_Acc_List.txt es como sigue:
-~~~
-SRR11192680
-SRR11192681
-SRR11192682
-SRR11192683
-SRR11192684
-~~~
-Descargar archivos SRA
-~~~
-prefetch --option-file SRR_Acc_List.txt
-~~~
-Convertir SRA a fastq
-~~~
-for name in DIRECTORY
-do
-fasterq-dump --split-files $name/$name.sra
-done
-~~~
-## Instalación de Kraken2
-Antes de instalar kraken 2, necesitarás actualizar la versión de sudo con:
+Actualizas la versión de sudo
 ```
 $ sudo apt-get update
 ```
@@ -106,13 +126,11 @@ El siguiente paso en la instalación podría tratar de instalar la paquetería m
 ```
 $ conda install -c bioconda kraken2
 ```
-Una vez que hayas descargado los datos, necesitarás correr el script de bash:
-```
-$ bash Anaconda3.....2022.sh
-```
+Una vez que se hayan descargado los datos. 
 Para seguir con el código anterior, presiona enter para continuar y acepta los términos de instalación. Para finalizar el proceso, necesitan configurar el PATH donde quieras ubicarlo, de lo contrario, deja las condiciones en default.
 
 
+... falta terminar de correrlo y ver cómo funciona para hongos. 
 
 
 
